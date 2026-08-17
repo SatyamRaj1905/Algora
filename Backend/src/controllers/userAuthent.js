@@ -2,6 +2,7 @@ const User = require("../models/user");
 const validate = require('../utils/validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const redisClient = require('../config/redis')
 
 // Register
 const register = async (req, res) => {
@@ -76,6 +77,9 @@ const logout = async(req,res)=>{
     try{
         const {token} = req.cookies;
         const payload = jwt.decode(token);
+
+        await redisClient.set(`token:${token}`,'Blocked');
+        await redisClient.expireAt(`token:${token}`,payload.exp); 
 
         res.cookie("token",null,{expires: new Date(Date.now())});
         res.send("Logged Out Succesfully");
