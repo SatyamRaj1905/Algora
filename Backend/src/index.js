@@ -6,12 +6,19 @@ const redisClient = require('./config/redis');
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/user-Authentication");
+const problemRouter = require("./routes/problemCreator");
+const submissionRouter = require("./routes/submit");
 
+app.use(cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    credentials: true,
+}));
 app.use(express.json());
 app.use(cookieParser());
 
-
-app.use('/user', authRouter)
+app.use("/user", authRouter);
+app.use("/problem", problemRouter);
+app.use("/submission", submissionRouter);
 
 const InitalizeConnection = async ()=>{
     try{

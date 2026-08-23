@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
+test/
 
 # Environment variables
 .env
 !.env.example
+
+# Files
+postman.md
